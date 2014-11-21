@@ -770,7 +770,18 @@ sub _multi_expect {
 							# Matching regexp
 							$match  = shift @matchlist;
 							my $start = index ${*$exp}{exp_Accum}, $match;
-							die 'The match could not be found' if $start == -1;
+							if ($start == -1)
+							{die 'The match could not be found'} 
+							else
+							{
+							my $newp;
+							do
+							{
+							 $newp = index (${*$exp}{exp_Accum}, $match, $start+1);
+							if($newp != -1)
+							{$start=$newp}
+							}until($newp == -1)
+							}
 							$before = substr ${*$exp}{exp_Accum}, 0, $start;
 							$after = substr ${*$exp}{exp_Accum}, $start + length($match);
 
